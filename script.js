@@ -15,39 +15,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }, observerOptions);
 
     // Apply initial state for intersection observer targeting cards and sections
-    document.querySelectorAll('.card, .section-title').forEach(el => {
+    document.querySelectorAll('.card, .section-title, .hero-contact').forEach(el => {
         el.style.opacity = '0';
-        el.style.transform = 'translateY(30px)';
-        el.style.transition = 'opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1)';
+        el.style.transform = 'translateY(40px)';
+        el.style.transition = 'opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)';
         observer.observe(el);
     });
 
-    // --- Antigravity Cursor Glow Logic ---
-    const cursorGlow = document.createElement('div');
-    cursorGlow.classList.add('cursor-glow');
-    document.body.appendChild(cursorGlow);
-
-    let mouseX = window.innerWidth / 2;
-    let mouseY = window.innerHeight / 2;
-    let glowX = window.innerWidth / 2;
-    let glowY = window.innerHeight / 2;
-
+    // --- Physical Hardware Light Interaction ---
+    // This creates the effect of a physical light hitting the titanium rims of the cards
     document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
+        document.querySelectorAll('.card').forEach(card => {
+            const rect = card.getBoundingClientRect();
+            // Calculate mouse position relative to the exact card
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            // Set css variables to control the position of the radial gradient
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
     });
-
-    function animateGlow() {
-        // Interpolate (lerp) the position for a smooth fluid movement
-        glowX += (mouseX - glowX) * 0.08;
-        glowY += (mouseY - glowY) * 0.08;
-        
-        cursorGlow.style.left = `${glowX}px`;
-        cursorGlow.style.top = `${glowY}px`;
-        
-        requestAnimationFrame(animateGlow);
-    }
-    
-    // Start animation loop
-    animateGlow();
 });
