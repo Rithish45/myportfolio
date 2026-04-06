@@ -1,38 +1,53 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Intersection Observer for scroll animations
+    // Apple-style scroll reveal elements
     const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.15
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
     };
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
             }
         });
     }, observerOptions);
 
-    // Initial check
-    const sections = document.querySelectorAll('section');
-    sections.forEach(section => {
-        observer.observe(section);
-        const rect = section.getBoundingClientRect();
-        if (rect.top < window.innerHeight && rect.bottom >= 0) {
-            section.classList.add('visible');
-        }
+    // Apply initial state for intersection observer targeting cards and sections
+    document.querySelectorAll('.card, .section-title').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 1s cubic-bezier(0.16, 1, 0.3, 1), transform 1s cubic-bezier(0.16, 1, 0.3, 1)';
+        observer.observe(el);
     });
 
-    // Parallax on the massive background text
-    const bgText = document.querySelector('.bg-text-massive');
+    // --- Antigravity Cursor Glow Logic ---
+    const cursorGlow = document.createElement('div');
+    cursorGlow.classList.add('cursor-glow');
+    document.body.appendChild(cursorGlow);
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+    let glowX = window.innerWidth / 2;
+    let glowY = window.innerHeight / 2;
+
     document.addEventListener('mousemove', (e) => {
-        if (!bgText) return;
-        const x = (e.clientX / window.innerWidth - 0.5) * 40;
-        const y = (e.clientY / window.innerHeight - 0.5) * 40;
-        
-        // We override the drift animation slightly using a secondary translate
-        bgText.style.marginLeft = `${-x}px`;
-        bgText.style.marginTop = `${-y}px`;
+        mouseX = e.clientX;
+        mouseY = e.clientY;
     });
+
+    function animateGlow() {
+        // Interpolate (lerp) the position for a smooth fluid movement
+        glowX += (mouseX - glowX) * 0.08;
+        glowY += (mouseY - glowY) * 0.08;
+        
+        cursorGlow.style.left = `${glowX}px`;
+        cursorGlow.style.top = `${glowY}px`;
+        
+        requestAnimationFrame(animateGlow);
+    }
+    
+    // Start animation loop
+    animateGlow();
 });
