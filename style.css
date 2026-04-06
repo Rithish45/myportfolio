@@ -23,6 +23,66 @@ body {
     line-height: 1.5;
 }
 
+/* Realistic Breathing Dark Matter Background */
+.breathing-background {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    z-index: -3;
+    background: #000;
+    overflow: hidden;
+}
+
+.breath-shape {
+    position: absolute;
+    filter: blur(140px); /* Massive blur for fluid volumetric feel */
+    opacity: 0.6;
+    animation: breathe 25s cubic-bezier(0.4, 0, 0.2, 1) infinite alternate;
+}
+
+/* Liquid Titanium shapes - purely monochrome/silver shades */
+.shape-1 {
+    width: 70vw; height: 70vh;
+    background: #2a2a2e; /* Dark slate titanium */
+    top: -10vh; left: -10vw;
+    animation-delay: 0s;
+}
+
+.shape-2 {
+    width: 60vw; height: 80vh;
+    background: #1c1c20; /* Deep gray */
+    bottom: -20vh; right: -10vw;
+    animation-delay: -5s;
+    animation-duration: 22s;
+}
+
+.shape-3 {
+    width: 50vw; height: 50vh;
+    background: #3a3a40; /* Lighter silver highlight */
+    top: 30vh; left: 40vw;
+    animation-delay: -10s;
+    animation-duration: 28s;
+}
+
+@keyframes breathe {
+    0% { transform: scale(0.9) translate(0, 0) rotate(0deg); opacity: 0.4; }
+    50% { transform: scale(1.1) translate(30px, -30px) rotate(5deg); opacity: 0.8; }
+    100% { transform: scale(0.95) translate(-20px, 20px) rotate(-3deg); opacity: 0.5; }
+}
+
+/* Matte Glass Noise Texture to make gradients seamless and physical */
+.bg-noise {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none;
+    z-index: -2;
+    opacity: 0.2;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    mix-blend-mode: soft-light;
+}
+
+
 /* Base Structural Layout */
 .container {
     max-width: 980px; 
@@ -43,7 +103,6 @@ section {
     text-align: center;
     margin-bottom: 80px;
     letter-spacing: -0.04em;
-    /* Titanium text effect */
     background: linear-gradient(180deg, #ffffff 0%, #767676 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -67,7 +126,6 @@ section {
     margin-bottom: 15px;
     line-height: 1.1;
     
-    /* Flowing Metallic Shimmer */
     background: linear-gradient(
         110deg,
         #444 0%, 
@@ -77,7 +135,7 @@ section {
         #444 100%
     );
     background-size: 200% auto;
-    color: #444; /* Fallback */
+    color: #444; 
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     animation: shine 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
@@ -113,12 +171,9 @@ section {
     font-weight: 600;
     text-decoration: none;
     transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    
-    /* Frosted glass / Premium feel */
     background: rgba(255, 255, 255, 0.08);
     color: #fff;
     backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
@@ -126,7 +181,6 @@ section {
     background: transparent;
     border: none;
     backdrop-filter: none;
-    -webkit-backdrop-filter: none;
     color: #a1a1a6;
 }
 
@@ -148,11 +202,10 @@ section {
     gap: 30px;
 }
 
-/* The interactive physical hardware effect wrapper */
 .card {
     position: relative;
     border-radius: 24px;
-    padding: 2px; /* This controls the thickness of the metallic rim */
+    padding: 2px;
     background: #111;
     overflow: hidden;
     transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
@@ -162,7 +215,6 @@ section {
     transform: scale(1.02);
 }
 
-/* The dynamic mouse-following rim light layer */
 .card-light-border {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
@@ -172,20 +224,20 @@ section {
         transparent 40%
     );
     border-radius: 24px;
-    z-index: 1; /* Sits beneath the content block */
+    z-index: 1;
 }
 
-/* The actual "glass" block inside the card */
+/* Glass over the breathing background */
 .card-content {
     position: relative;
-    background: rgba(18, 18, 19, 0.95);
+    background: rgba(18, 18, 19, 0.8); /* Noticeably translucent to see the breathing background */
     backdrop-filter: blur(40px);
     -webkit-backdrop-filter: blur(40px);
-    border-radius: 22px; /* Slightly smaller than outer radius */
+    border-radius: 22px; 
     padding: 40px;
     height: 100%;
     width: 100%;
-    z-index: 2; /* Content sits on top of the rim light */
+    z-index: 2; 
     display: flex;
     flex-direction: column;
 }
@@ -223,12 +275,11 @@ section {
     color: #86868b;
 }
 
-/* Precision Sub-Elements */
 .skills-container {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-    margin-top: auto; /* Pushes to bottom */
+    margin-top: auto; 
 }
 
 .skill-pill {
@@ -248,7 +299,7 @@ footer {
     font-size: 12px;
     border-top: 1px solid rgba(255,255,255,0.05);
     margin-top: 100px;
-    background: #000;
+    background: transparent;
 }
 
 @media (max-width: 768px) {
